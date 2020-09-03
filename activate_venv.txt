@@ -1,0 +1,8 @@
+# Check the Paython 3 version
+python3 -version
+# Install virtual environment package
+sudo apt install python3-venv
+# Create the virtual environment, i.e. a folder where all the packages will be installed for the given project
+python3 -m venv <folder name>
+# Command to activate the virtual environment
+source <folder name>/bin/activate
