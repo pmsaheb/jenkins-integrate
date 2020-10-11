@@ -43,32 +43,35 @@ print()
 print(hldy_days)
 
 #Convert the holiday schedule years, holiday schedule dates and days into Python DataFrames
-hldy_years_df = pd.DataFrame() 
-hldy_years_df['year'] = hldy_years 
-
-hldy_names_df = pd.DataFrame()
-hldy_names_df['holiday'] = hldy_names
-
 i = int(len(hldy_days)/len(hldy_years))
+print(i)
+
 hldy_years = hldy_years * i
+print(hldy_years)
+
+hldy_years_df = pd.DataFrame()
+hldy_years_df['yr'] = hldy_years
 
 hldy_days_df = pd.DataFrame()
 hldy_days_df['days'] = hldy_days
 hldy_days_df['days'] = hldy_days_df['days'].str.split(",",expand=True)[1]
 hldy_days_df['days'] = hldy_days_df['days'].str.strip('*')
-hldy_days_df['days'] = hldy_days_df['days'].str.split(expand=True)[0] + hldy_days_df['days'].str.split(expand=True)[1]
+#hldy_days_df['mnth_day'] = hldy_days_df['days'].str.split(expand=True)[0] + hldy_days_df['days'].str.split(expand=True)[1].str.zfill(2)
+hldy_days_df['mnth'] = hldy_days_df['days'].str.split(expand=True)[0]
+hldy_days_df['day'] = hldy_days_df['days'].str.split(expand=True)[1].str.zfill(2)
 
-print(hldy_years_df)
-print()
-print()
+hldy_days_df = hldy_days_df.join(hldy_years_df)
+#hldy_days_df['dtx'] = hldy_days_df['mnth_day'] + hldy_days_df['yr']
+#hldy_days_df = hldy_days_df.sort_values(['dtx'])
 
-hldy_years_df = hldy_years_df.transpose()
-print(hldy_years_df)
+#hldy_days_df = hldy_days_df[['dtx']]
+hldy_days_df = hldy_days_df[['mnth','day','yr']]
+hldy_days_df['dtx'] = pd.to_datetime(hldy_days_df['mnth'] + hldy_days_df['day'].astype(str) + hldy_days_df['yr'].astype(str),format='%B%d%Y')
+hldy_days_df = hldy_days_df[pd.notnull(hldy_days_df['dtx'])]
+hldy_days_df = hldy_days_df[['dtx']].sort_values(['dtx'])
 print()
 print()
-
-print(hldy_names_df)
-print()
-print()
-
 print(hldy_days_df)
+
+hldy_list = hldy_days_df.values.tolist()
+print(hldy_list)
