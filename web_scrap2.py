@@ -45,9 +45,14 @@ hldy_days_df = hldy_days_df[['mnth','day','yr']]
 hldy_days_df['dtx'] = pd.to_datetime(hldy_days_df['mnth'] + hldy_days_df['day'].astype(str) + hldy_days_df['yr'].astype(str),format='%B%d%Y')
 hldy_days_df = hldy_days_df[pd.notnull(hldy_days_df['dtx'])]
 hldy_days_df = hldy_days_df[['dtx']].sort_values(['dtx'])
+hldy_days_df = hldy_days_df['dtx'].dt.strftime('%m-%d-%Y')
+
+# hldy_days_df.reset_index('dtx',drop=True,inplace=True)
+
+# print(hldy_days_df.index.name)
+
 print()
 print()
 print(hldy_days_df)
 
-hldy_list = hldy_days_df.values.tolist()
-print(hldy_list)
+hldy_days_df.to_json (r'/home/masthan/DevOps/Python/NYSE_Holidays.json',orient='split',index=False)
